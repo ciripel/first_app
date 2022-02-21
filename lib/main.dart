@@ -69,17 +69,17 @@ class _MyHomePageState extends State<MyHomePage> {
     wallet = HDWallet.createWithMnemonic(mnemonic);
 
     print("Wallet Mnemonic: " + wallet.mnemonic());
-    print("-------------------------");
-    print("Zcash Address: " +
-        wallet.getAddressForCoin(TWCoinType.TWCoinTypeZcash));
-    print("Litecoin Address: " +
-        wallet.getAddressForCoin(TWCoinType.TWCoinTypeLitecoin));
-    print("Ethereum Address: " +
-        wallet.getAddressForCoin(TWCoinType.TWCoinTypeEthereum));
-    print("Solana Address: " +
-        wallet.getAddressForCoin(TWCoinType.TWCoinTypeSolana));
-    print("Stellar Address: " +
-        wallet.getAddressForCoin(TWCoinType.TWCoinTypeStellar));
+    // print("-------------------------");
+    // print("Zcash Address: " +
+    //     wallet.getAddressForCoin(TWCoinType.TWCoinTypeZcash));
+    // print("Litecoin Address: " +
+    //     wallet.getAddressForCoin(TWCoinType.TWCoinTypeLitecoin));
+    // print("Ethereum Address: " +
+    //     wallet.getAddressForCoin(TWCoinType.TWCoinTypeEthereum));
+    // print("Solana Address: " +
+    //     wallet.getAddressForCoin(TWCoinType.TWCoinTypeSolana));
+    // print("Stellar Address: " +
+    //     wallet.getAddressForCoin(TWCoinType.TWCoinTypeStellar));
 
     // int coin = TWCoinType.TWCoinTypeZcash;
     // final addressZec = wallet.getAddressForCoin(coin);
@@ -156,7 +156,12 @@ class _MyHomePageState extends State<MyHomePage> {
         transferTransaction: tx);
     final sign = AnySigner.sign(signingInput.writeToBuffer(), coin);
     final signingOutput = Solana.SigningOutput.fromBuffer(sign);
-    print("\n-------------------------\nEncoded signingOutput: " +
+    print("Solana Sender Address: $addressSol");
+    print("Solana Receiver Address: $toAddress");
+    print("Address PrivateKey: " + secretPrivateKeySol.data().toString());
+    print("BlockHash: $blockHash");
+    print("Amount: 2000");
+    print("-------------------------\nEncoded signingOutput: " +
         signingOutput.encoded);
 
     return wallet;
