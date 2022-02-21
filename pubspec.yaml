@@ -38,6 +38,8 @@ dependencies:
       url: https://github.com/weishirongzhen/flutter_trust_wallet_core_lib_include.git
       ref: main # branch name
       # ref: ea12e41 # commit hash
+  logger: ^1.0.0
+  convert: ^3.0.1
 
 dev_dependencies:
   flutter_test:
