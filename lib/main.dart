@@ -6,6 +6,7 @@ import 'package:flutter_trust_wallet_core/trust_wallet_core_ffi.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter_trust_wallet_core/protobuf/bitcoin.pb.dart' as Bitcoin;
 import 'package:fixnum/fixnum.dart' as $fixnum;
+import 'package:flutter_trust_wallet_core/protobuf/Solana.pb.dart' as Solana;
 
 void main() {
   runApp(const MyApp());
@@ -80,67 +81,83 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Stellar Address: " +
         wallet.getAddressForCoin(TWCoinType.TWCoinTypeStellar));
 
-    int coin = TWCoinType.TWCoinTypeZcash;
-    final addressZec = wallet.getAddressForCoin(coin);
-    print(addressZec);
-    const toAddress = "t1RTNMRyJhc1UgfvrTSqFP46C5xuyxjJGeR";
-    const changeAddress = "t1RTNMRyJhc1UgfvrTSqFP46C5xuyxjJGeR";
-    final secretPrivateKeyBtc = wallet.getKeyForCoin(coin);
-    final signingInput = Bitcoin.SigningInput(
-      amount: $fixnum.Int64.parseInt('37000'),
-      hashType: BitcoinScript.hashTypeForCoin(coin),
-      toAddress: toAddress,
-      changeAddress: changeAddress,
-      byteFee: $fixnum.Int64.parseInt('10'),
-      coinType: coin,
-      utxo: [
-        Bitcoin.UnspentTransaction(
-          amount: $fixnum.Int64.parseInt('20000'),
-          outPoint: Bitcoin.OutPoint(
-            hash: hex
-                .decode(
-                    '1b23757cdc023b3ac9f033522abb9f845815b65cce1e25411e8ad950899c0e71')
-                .reversed
-                .toList(),
-            index: 0,
-            sequence: 4294967295,
-          ),
-          script: BitcoinScript.lockScriptForAddress(addressZec, coin)
-              .data()
-              .toList(),
-        ),
-        Bitcoin.UnspentTransaction(
-          amount: $fixnum.Int64.parseInt('20000'),
-          outPoint: Bitcoin.OutPoint(
-            hash: hex
-                .decode(
-                    '7611002ff116fad20ef12ad30010a07d5b25edf37209504dd42a6a4c5c27aa75')
-                .reversed
-                .toList(),
-            index: 0,
-            sequence: 4294967295,
-          ),
-          script: BitcoinScript.lockScriptForAddress(addressZec, coin)
-              .data()
-              .toList(),
-        ),
-      ],
-      privateKey: [
-        secretPrivateKeyBtc.data().toList(),
-      ],
-    );
-    final transactionPlan = Bitcoin.TransactionPlan.fromBuffer(
-        AnySigner.signerPlan(signingInput.writeToBuffer(), coin).toList());
-    // logger.d(
+    // int coin = TWCoinType.TWCoinTypeZcash;
+    // final addressZec = wallet.getAddressForCoin(coin);
+    // print(addressZec);
+    // const toAddress = "t1RTNMRyJhc1UgfvrTSqFP46C5xuyxjJGeR";
+    // const changeAddress = "t1RTNMRyJhc1UgfvrTSqFP46C5xuyxjJGeR";
+    // final secretPrivateKeyBtc = wallet.getKeyForCoin(coin);
+    // final signingInput = Bitcoin.SigningInput(
+    //   amount: $fixnum.Int64.parseInt('37000'),
+    //   hashType: BitcoinScript.hashTypeForCoin(coin),
+    //   toAddress: toAddress,
+    //   changeAddress: changeAddress,
+    //   byteFee: $fixnum.Int64.parseInt('10'),
+    //   coinType: coin,
+    //   utxo: [
+    //     Bitcoin.UnspentTransaction(
+    //       amount: $fixnum.Int64.parseInt('20000'),
+    //       outPoint: Bitcoin.OutPoint(
+    //         hash: hex
+    //             .decode(
+    //                 '1b23757cdc023b3ac9f033522abb9f845815b65cce1e25411e8ad950899c0e71')
+    //             .reversed
+    //             .toList(),
+    //         index: 0,
+    //         sequence: 4294967295,
+    //       ),
+    //       script: BitcoinScript.lockScriptForAddress(addressZec, coin)
+    //           .data()
+    //           .toList(),
+    //     ),
+    //     Bitcoin.UnspentTransaction(
+    //       amount: $fixnum.Int64.parseInt('20000'),
+    //       outPoint: Bitcoin.OutPoint(
+    //         hash: hex
+    //             .decode(
+    //                 '7611002ff116fad20ef12ad30010a07d5b25edf37209504dd42a6a4c5c27aa75')
+    //             .reversed
+    //             .toList(),
+    //         index: 0,
+    //         sequence: 4294967295,
+    //       ),
+    //       script: BitcoinScript.lockScriptForAddress(addressZec, coin)
+    //           .data()
+    //           .toList(),
+    //     ),
+    //   ],
+    //   privateKey: [
+    //     secretPrivateKeyBtc.data().toList(),
+    //   ],
+    // );
+    // final transactionPlan = Bitcoin.TransactionPlan.fromBuffer(
+    //     AnySigner.signerPlan(signingInput.writeToBuffer(), coin).toList());
+    // // logger.d(
+    // //     'availableAmount: ${transactionPlan.availableAmount} amount: ${transactionPlan.amount} fee: ${transactionPlan.fee} change: ${transactionPlan.change}');
+    // print(
     //     'availableAmount: ${transactionPlan.availableAmount} amount: ${transactionPlan.amount} fee: ${transactionPlan.fee} change: ${transactionPlan.change}');
-    print(
-        'availableAmount: ${transactionPlan.availableAmount} amount: ${transactionPlan.amount} fee: ${transactionPlan.fee} change: ${transactionPlan.change}');
-    signingInput.plan = transactionPlan;
-    signingInput.amount = transactionPlan.amount;
-    final sign = AnySigner.sign(signingInput.writeToBuffer(), coin);
-    final signingOutput = Bitcoin.SigningOutput.fromBuffer(sign);
-    print(hex.encode(signingOutput.encoded));
+    // signingInput.plan = transactionPlan;
+    // signingInput.amount = transactionPlan.amount;
+    // final sign = AnySigner.sign(signingInput.writeToBuffer(), coin);
+    // final signingOutput = Bitcoin.SigningOutput.fromBuffer(sign);
+    // print(hex.encode(signingOutput.encoded));
     // logger.d(hex.encode(signingOutput.encoded));
+
+    int coin = TWCoinType.TWCoinTypeSolana;
+    final addressSol = wallet.getAddressForCoin(coin);
+    const toAddress = "3fTR8GGL2mniGyHtd3Qy2KDVhZ9LHbW59rCc7A3RtBWk";
+    final secretPrivateKeySol = wallet.getKeyForCoin(coin);
+    const blockHash = "4NNbEToEfcexW1wuKpe5gfA3ntqEC6CzC3u4QD96wkCJ";
+    final tx = Solana.Transfer(
+        recipient: toAddress, value: $fixnum.Int64.parseInt('2000'));
+    final signingInput = Solana.SigningInput(
+        privateKey: secretPrivateKeySol.data().toList(),
+        recentBlockhash: blockHash,
+        transferTransaction: tx);
+    final sign = AnySigner.sign(signingInput.writeToBuffer(), coin);
+    final signingOutput = Solana.SigningOutput.fromBuffer(sign);
+    print("\n-------------------------\nEncoded signingOutput: " +
+        signingOutput.encoded);
 
     return wallet;
   }
