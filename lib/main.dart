@@ -3,10 +3,11 @@ import 'package:flutter_trust_wallet_core/flutter_trust_wallet_core.dart';
 import 'package:flutter_trust_wallet_core/trust_wallet_core_ffi.dart';
 
 // import 'package:first_app/base_example.dart';
-import 'package:convert/convert.dart';
+import 'dart:convert';
 import 'package:flutter_trust_wallet_core/protobuf/bitcoin.pb.dart' as Bitcoin;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:flutter_trust_wallet_core/protobuf/Solana.pb.dart' as Solana;
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -56,16 +57,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  String mnemonic =
-      "horror select baby exile convince sunset outside vehicle write decade powder energy";
+  String mnemonic = "your seed";
 
   late HDWallet wallet;
 
-  @override
-  HDWallet initState() {
-    FlutterTrustWalletCore.init();
-    super.initState();
+  Future<http.Response> createRequest(apiEndpoint, data) async {
+    return http.post(
+      Uri.parse(apiEndpoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
+  }
 
+  Future<String> createTransaction() async {
     wallet = HDWallet.createWithMnemonic(mnemonic);
 
     print("Wallet Mnemonic: " + wallet.mnemonic());
@@ -147,7 +153,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final addressSol = wallet.getAddressForCoin(coin);
     const toAddress = "3fTR8GGL2mniGyHtd3Qy2KDVhZ9LHbW59rCc7A3RtBWk";
     final secretPrivateKeySol = wallet.getKeyForCoin(coin);
-    const blockHash = "4NNbEToEfcexW1wuKpe5gfA3ntqEC6CzC3u4QD96wkCJ";
+
+    // Await the http get response, then decode the json-formatted response.
+    var response = await createRequest("https://api.devnet.solana.com",
+        {"jsonrpc": "2.0", "id": "1", "method": "getRecentBlockhash"});
+    var json = jsonDecode(response.body);
+    print(json);
+    var blockHash = json["result"]["value"]["blockhash"];
     final tx = Solana.Transfer(
         recipient: toAddress, value: $fixnum.Int64.parseInt('2000'));
     final signingInput = Solana.SigningInput(
@@ -164,7 +176,21 @@ class _MyHomePageState extends State<MyHomePage> {
     print("-------------------------\nEncoded signingOutput: " +
         signingOutput.encoded);
 
-    return wallet;
+    var broadcast = await createRequest("https://api.devnet.solana.com", {
+      "jsonrpc": "2.0",
+      "id": "1",
+      "method": "sendTransaction",
+      "params": [signingOutput.encoded]
+    });
+    print("response" + broadcast.body);
+    return signingOutput.encoded;
+  }
+
+  @override
+  void initState() {
+    FlutterTrustWalletCore.init();
+    super.initState();
+    createTransaction();
   }
 
   void _incrementCounter() {

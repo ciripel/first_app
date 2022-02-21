@@ -104,6 +104,20 @@ packages:
       url: "https://github.com/weishirongzhen/flutter_trust_wallet_core_lib_include.git"
     source: git
     version: "0.0.2"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.4"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   lints:
     dependency: transitive
     description:
