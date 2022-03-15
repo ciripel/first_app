@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_trust_wallet_core/flutter_trust_wallet_core.dart';
-import 'package:flutter_trust_wallet_core/trust_wallet_core_ffi.dart';
+import 'package:trust_wallet_core/flutter_trust_wallet_core.dart';
+import 'package:trust_wallet_core/trust_wallet_core_ffi.dart';
 
 // import 'package:first_app/base_example.dart';
 import 'dart:convert';
-import 'package:flutter_trust_wallet_core/protobuf/bitcoin.pb.dart' as Bitcoin;
+// import 'package:trust_wallet_core/protobuf/bitcoin.pb.dart' as Bitcoin;
 import 'package:fixnum/fixnum.dart' as $fixnum;
-import 'package:flutter_trust_wallet_core/protobuf/Solana.pb.dart' as Solana;
+import 'package:trust_wallet_core/protobuf/Solana.pb.dart' as Solana;
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -56,12 +56,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String mnemonic = "your seed";
+  String mnemonic =
+      "horror select baby exile convince sunset outside vehicle write decade powder energy";
 
   late HDWallet wallet;
 
   Future<http.Response> createRequest(apiEndpoint, data) async {
+    FlutterTrustWalletCore.init();
     return http.post(
       Uri.parse(apiEndpoint),
       headers: <String, String>{
@@ -193,17 +194,6 @@ class _MyHomePageState extends State<MyHomePage> {
     createTransaction();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     String zcash = wallet.getAddressForCoin(TWCoinType.TWCoinTypeZcash);
@@ -269,11 +259,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add_call),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

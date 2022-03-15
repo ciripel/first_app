@@ -95,15 +95,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_trust_wallet_core:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: "23ce1165b4eb276ed2774062375438db8c664208"
-      url: "https://github.com/weishirongzhen/flutter_trust_wallet_core_lib_include.git"
-    source: git
-    version: "0.0.2"
   http:
     dependency: "direct main"
     description:
@@ -214,6 +205,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.8"
+  trust_wallet_core:
+    dependency: "direct main"
+    description:
+      name: trust_wallet_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   typed_data:
     dependency: transitive
     description:
