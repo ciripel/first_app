@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:trust_wallet_core/flutter_trust_wallet_core.dart';
 import 'package:trust_wallet_core/trust_wallet_core_ffi.dart';
@@ -62,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late HDWallet wallet;
 
   Future<http.Response> createRequest(apiEndpoint, data) async {
-    FlutterTrustWalletCore.init();
     return http.post(
       Uri.parse(apiEndpoint),
       headers: <String, String>{
@@ -192,6 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
     FlutterTrustWalletCore.init();
     super.initState();
     createTransaction();
+    wallet = HDWallet.createWithMnemonic(mnemonic);
   }
 
   @override
